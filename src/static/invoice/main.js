@@ -16,16 +16,24 @@ function itemConstructor(el, classes, content) {
   return item;
 }
 
-// --- Load stored items ---
-const storedItems = sessionStorage.getItem("invoiceItems");
-if (storedItems) {
-  items = JSON.parse(storedItems);
-} else {
+function saveDetails() {
+  sessionStorage.setItem("invoiceDetails", JSON.stringify(formDetails));
+}
+
+function saveItems() {
   sessionStorage.setItem("invoiceItems", JSON.stringify(items));
 }
 
-// --- Load and render details ---
+// --- Load stored data ---
+const storedItems = sessionStorage.getItem("invoiceItems");
+items = storedItems ? JSON.parse(storedItems) : [];
+
+const storedDetails = sessionStorage.getItem("invoiceDetails");
+formDetails = storedDetails ? JSON.parse(storedDetails) : {};
+
+// --- Load and render on page ready ---
 window.addEventListener("DOMContentLoaded", () => {
+  currentDate();
   renderDetails();
   itemRender();
 });
@@ -33,24 +41,19 @@ window.addEventListener("DOMContentLoaded", () => {
 // --- Set invoice date ---
 function currentDate() {
   const date = document.getElementById("date");
-  const currentDate = new Date();
+  const today = new Date();
   date.textContent =
-    currentDate.getFullYear() +
+    today.getFullYear() +
     "/" +
-    ("0" + (currentDate.getMonth() + 1)).slice(-2) +
+    ("0" + (today.getMonth() + 1)).slice(-2) +
     "/" +
-    ("0" + currentDate.getDate()).slice(-2);
+    ("0" + today.getDate()).slice(-2);
 }
 
-currentDate();
-
 // --- Render Details ---
+// Renders the in-memory formDetails to the page. Does not read or write
+// storage — call saveDetails() separately when formDetails actually changes.
 function renderDetails() {
-  const stored = sessionStorage.getItem("invoiceDetails");
-  if (stored) {
-    formDetails = JSON.parse(stored);
-  }
-
   // contractor details
   document.getElementById("email-value").textContent =
     formDetails.email || "name@email.com";
@@ -79,8 +82,6 @@ function renderDetails() {
   ).toFixed(2);
   document.getElementById("taxed").checked = formDetails.taxed ?? false;
 
-  sessionStorage.setItem("invoiceDetails", JSON.stringify(formDetails));
-
   calculateTotal();
 }
 
@@ -102,22 +103,16 @@ for (const fieldId of fieldMappings) {
   if (!el) continue;
 
   el.addEventListener("change", () => {
-    const value = el.type === "checkbox" ? el.checked : el.value;
-    formDetails[fieldId] = value;
-
-    sessionStorage.setItem("invoiceDetails", JSON.stringify(formDetails));
+    formDetails[fieldId] = el.type === "checkbox" ? el.checked : el.value;
+    saveDetails();
     renderDetails();
-    calculateTotal();
   });
 }
 
 // --- Calculate Totals ---
+// Uses the in-memory formDetails — assumes renderDetails() or the caller
+// has already synced any changes before calling this.
 function calculateTotal() {
-  const storedDetails = sessionStorage.getItem("invoiceDetails");
-  if (storedDetails) {
-    formDetails = JSON.parse(storedDetails);
-  }
-
   const itemsTotal = document.querySelectorAll(".item-total");
   const cost = document.getElementById("cost-value");
   const tax = document.getElementById("tax-value");
@@ -167,27 +162,23 @@ function itemRender() {
 }
 
 function itemAdd() {
-  const itemDescInput = document.getElementById("item-desc").value;
-  const itemQtyInput = document.getElementById("item-qty").value;
-  const itemRateInput = document.getElementById("item-rate").value;
+  const descInput = document.getElementById("item-desc");
+  const qtyInput = document.getElementById("item-qty");
+  const rateInput = document.getElementById("item-rate");
 
-  if (!itemDescInput || !itemQtyInput || !itemRateInput) return;
+  if (!descInput.value || !qtyInput.value || !rateInput.value) return;
 
-  const item = {
-    desc: itemDescInput,
-    qty: itemQtyInput,
-    rate: itemRateInput,
-  };
+  items.push({
+    desc: descInput.value,
+    qty: qtyInput.value,
+    rate: rateInput.value,
+  });
+  saveItems();
 
-  items.push(item);
-  sessionStorage.setItem("invoiceItems", JSON.stringify(items));
-
-  // Clear input fields
-  document.getElementById("item-desc").value = "";
-  document.getElementById("item-qty").value = "";
-  document.getElementById("item-rate").value = "";
-
-  document.getElementById("item-desc").focus();
+  descInput.value = "";
+  qtyInput.value = "";
+  rateInput.value = "";
+  descInput.focus();
 
   itemRender();
 }
