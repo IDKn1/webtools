@@ -1,0 +1,86 @@
+<script src="https://unpkg.com/lucide@latest"></script>
+<script type="module">
+    lucide.createIcons();
+</script>
+<button class="sidebar-open-btn" id="sidebar-open-btn" type="button">
+    <i data-lucide="panel-right-open"></i>
+</button>
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-tabs">
+        <button
+            class="tab-btn active"
+            id="tab-info"
+            title="Invoice info"
+            onclick="switchTab('info')"
+        >
+            <i data-lucide="list"></i>
+        </button>
+        <button
+            class="tab-btn"
+            id="tab-item"
+            title="Add item"
+            onclick="switchTab('item')"
+        >
+            <i data-lucide="plus"></i>
+        </button>
+        <button
+            class="tab-btn"
+            id="sidebar-close-btn"
+            type="button"
+        >
+            <i data-lucide="panel-right-close"></i>
+        </button>
+    </div>
+
+    <!-- Add Item panel -->
+    <div class="sidebar-panel active" id="panel-item">
+        <span class="panel-title">Add line item</span>
+        <form id="item-form">
+            <input id="item-desc" type="text" placeholder="Description">
+            <input id="item-qty" type="text" placeholder="Quantity / Hours">
+            <input id="item-rate" type="text" placeholder="Rate">
+            <button type="submit">Add item</button>
+        </form>
+    </div>
+
+    <!-- Info panel -->
+    <div class="sidebar-panel" id="panel-info">
+        <span class="panel-title">Your details</span>
+        <div class="contact-info">
+            <label for="email">Email</label>
+            <input id="email" type="text" name="email">
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" name="phoneNumber">
+        </div>
+        <div class="invoice-number">
+            <label for="invoiceNumber">Invoice number</label>
+            <input id="invoiceNumber" type="text" name="invoiceNumber">
+        </div>
+
+        <span class="panel-title">Client</span>
+        <form id="client-form">
+            <label for="companyName">Company name</label>
+            <input id="companyName" type="text" name="companyName">
+            <label for="clientName">Client name</label>
+            <input id="clientName" type="text" name="clientName">
+            <label for="clientEmail">Client email</label>
+            <input id="clientEmail" type="text" name="clientEmail">
+            <label for="clientLocation">Client location</label>
+            <input id="clientLocation" type="text" name="clientLocation">
+        </form>
+
+        <span class="panel-title">Totals</span>
+        <div class="total-settings">
+            <div class="tax-rate">
+                <label for="taxed">Tax?</label>
+                <input id="taxed" type="checkbox" name="taxed">
+            </div>
+            <div class="amount-paid">
+                <label for="amountPaid">Amount already paid</label>
+                <input id="amountPaid" type="text" name="paidAmount">
+            </div>
+        </div>
+
+        <button type="button" onclick="savePDF();">Download as PDF</button>
+    </div>
+</aside>

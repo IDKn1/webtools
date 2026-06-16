@@ -6,10 +6,6 @@ title: "Invoice Generator"
 {% block style %}
 
 <link rel="stylesheet" href="style.css">
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
->
 {% endblock %}
 
 {% block content %}
@@ -75,57 +71,8 @@ title: "Invoice Generator"
         </div>
     </div>
 </div>
-<button class="modal-btn" id="modal-toggle-btn-item" type="button">
-    <i class="fa-solid fa-plus"></i>
-</button>
-<div class="modal" id="add-item-modal" style="display: none;">
-    <form id="item-form">
-        <input id="item-desc" type="text" placeholder="Description">
-        <input id="item-qty" type="text" placeholder="Quantity/Hours">
-        <input id="item-rate" type="text" placeholder="Rate">
-        <button type="submit">Add Item</button>
-    </form>
-    <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<button class="modal-btn" id="modal-toggle-btn-info" type="button">
-    <i class="fa-regular fa-rectangle-list"></i>
-</button>
-<div class="modal" id="info-modal" style="display: none;">
-    <div class="contact-info">
-        <label for="email">email</label>
-        <input id="email" type="text" name="email">
-        <label for="phoneNumber">phone</label>
-        <input id="phone" type="text" name="phoneNumber">
-    </div>
-    <div class="invoice-number">
-        <label for="invoiceNumber">invoice number</label>
-        <input id="invoiceNumber" type="text" name="invoiceNumber">
-    </div>
-    <form id="client-form">
-        <label for="companyName">company name</label>
-        <input id="companyName" type="text" name="companyName">
-        <label for="clientName">client name</label>
-        <input id="clientName" type="text" name="clientName">
-        <label for="clientEmail">client email</label>
-        <input id="clientEmail" type="text" name="clientEmail">
-        <label for="clientLocation">client location</label>
-        <input id="clientLocation" type="text" name="clientLocation">
-    </form>
-    <div class="total-settings">
-        <div class="tax-rate">
-            <label for="taxed">tax?</label>
-            <input id="taxed" type="checkbox" name="taxed">
-        </div>
-        <div class="amount-paid">
-            <label for="paidAmount">amount already paid</label>
-            <input id="amountPaid" type="text" name="paidAmount">
-        </div>
-    </div>
-    <button class="modal-close" type="button">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
-    <button onclick="savePDF();">Download as PDF</button>
-</div>
+{% render 'invoiceSideBar.liquid' %}
 <script src="main.js"></script>
-<script src="modal.js" type="module"></script>
+<script src="sidebar.js"> </script>
+
 {% endblock %}
