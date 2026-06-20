@@ -191,3 +191,12 @@ document.getElementById("item-form").addEventListener("submit", (e) => {
 function savePDF() {
   window.print();
 }
+
+function wipeFormDetails() {
+  formDetails = {};
+  items = [];
+  sessionStorage.removeItem("invoiceDetails");
+  sessionStorage.removeItem("invoiceItems");
+  renderDetails();
+  itemRender();
+}
