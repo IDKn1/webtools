@@ -3,7 +3,7 @@ body {
 }
 
 h1 {
-    font-size: 6rem;
+    font-size: 5rem;
     line-height: 0.8;
     padding-inline-end: 2rem;
 }
@@ -35,15 +35,13 @@ p {
 /* heading styling */
 
 .heading h1 {
-    position: relative;
-    grid-column: 1/9;
+    grid-column: 1/6;
 }
 
 .contact {
-    position: absolute;
-    top: 0rem;
-    left: 6ch;
+    font-weight: 700;
     line-height: 1.25;
+    grid-column: 6/9;
 }
 
 .invoice-text {
