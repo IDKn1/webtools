@@ -55,6 +55,8 @@ function currentDate() {
 // storage — call saveDetails() separately when formDetails actually changes.
 function renderDetails() {
   // contractor details
+  document.getElementById("name-value").textContent =
+    formDetails.name || "first last";
   document.getElementById("email-value").textContent =
     formDetails.email || "name@email.com";
   document.getElementById("payment-details").textContent =
@@ -87,6 +89,7 @@ function renderDetails() {
 
 // --- Field Listeners for Updates ---
 const fieldMappings = [
+  "name",
   "email",
   "phone",
   "invoiceNumber",
