@@ -5,11 +5,10 @@
 {% else %}
     {% assign textColor = 'inherit' %}
 {% endif %}
-
 <div
     class="color-card"
     style="background-color:#{{ code }}; color: {{ textColor }};"
-    onclick="copyHexCode()"
+    onclick="copyHexCode(this)"
 >
-    <div id="color-code">{{ code }}</div>
+    <div class="color-code">{{ code }}</div>
 </div>
