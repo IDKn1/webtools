@@ -53,58 +53,54 @@ function currentDate() {
 // --- Render Details ---
 // Renders the in-memory formDetails to the page. Does not read or write
 // storage — call saveDetails() separately when formDetails actually changes.
+const fieldMappings = [
+  { field: "name", elId: "name-value", fallback: "first last" },
+  { field: "email", elId: "email-value", fallback: "name@email.com" },
+  { field: "email", elId: "payment-details", fallback: "name@email.com" },
+  { field: "phone", elId: "phone-value", fallback: "+x (xxx) xxx-xxxx" },
+  {
+    field: "invoiceNumber",
+    elId: "invoice-number",
+    fallback: "00000",
+    format: (v) => ("00000" + (v || "0")).slice(-5),
+  },
+  { field: "companyName", elId: "company-name", fallback: "Company Name" },
+  { field: "clientName", elId: "client-name", fallback: "Client Name" },
+  { field: "clientEmail", elId: "client-email", fallback: "client@client.com" },
+  {
+    field: "clientLocation",
+    elId: "client-location",
+    fallback: "Client Address",
+  },
+  {
+    field: "amountPaid",
+    elId: "paid-value",
+    fallback: "0.00",
+    format: (v) => parseFloat(v || "0").toFixed(2),
+  },
+  { field: "taxed", elId: "taxed", type: "checkbox" },
+];
+
 function renderDetails() {
-  // contractor details
-  document.getElementById("name-value").textContent =
-    formDetails.name || "first last";
-  document.getElementById("email-value").textContent =
-    formDetails.email || "name@email.com";
-  document.getElementById("payment-details").textContent =
-    formDetails.email || "name@email.com";
-  document.getElementById("phone-value").textContent =
-    formDetails.phone || "+x (xxx) xxx-xxxx";
-
-  document.getElementById("invoice-number").textContent = (
-    "00000" + (formDetails.invoiceNumber || "0")
-  ).slice(-5);
-
-  // client details
-  document.getElementById("company-name").textContent =
-    formDetails.companyName || "Company Name";
-  document.getElementById("client-name").textContent =
-    formDetails.clientName || "Client Name";
-  document.getElementById("client-email").textContent =
-    formDetails.clientEmail || "client@client.com";
-  document.getElementById("client-location").textContent =
-    formDetails.clientLocation || "Client Address";
-
-  // payment info
-  document.getElementById("paid-value").textContent = parseFloat(
-    formDetails.amountPaid || "0",
-  ).toFixed(2);
-  document.getElementById("taxed").checked = formDetails.taxed ?? false;
+  for (const { field, elId, fallback, format, type } of fieldMappings) {
+    const el = document.getElementById(elId);
+    if (!el) continue;
+    const value = formDetails[field];
+    if (type === "checkbox") {
+      el.checked = value ?? false;
+    } else {
+      el.textContent = format ? format(value) : value || fallback;
+    }
+  }
 
   calculateTotal();
 }
 
-// --- Field Listeners for Updates ---
-const fieldMappings = [
-  "name",
-  "email",
-  "phone",
-  "invoiceNumber",
-  "companyName",
-  "clientName",
-  "clientEmail",
-  "clientLocation",
-  "amountPaid",
-  "taxed",
-];
+const inputFields = [...new Set(fieldMappings.map((m) => m.field))];
 
-for (const fieldId of fieldMappings) {
+for (const fieldId of inputFields) {
   const el = document.getElementById(fieldId);
   if (!el) continue;
-
   el.addEventListener("change", () => {
     formDetails[fieldId] = el.type === "checkbox" ? el.checked : el.value;
     saveDetails();
