@@ -4,38 +4,154 @@ title: "Invoice Generator"
 {% layout 'base.liquid' %}
 
 {% block style %}
+<script
+    defer
+    src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"
+></script>
 
 <link rel="stylesheet" href="style.css">
 {% endblock %}
 
 {% block content %}
+<div
+    class="content"
+    x-init="init()"
+    x-data="{
+    init() {
+        const storedItems = sessionStorage.getItem('invoiceItems');
+        this.items = storedItems ? JSON.parse(storedItems) : [];
+
+        this.loadDetails();
+
+    },
+    name: '',
+    email: '',
+    phone: '',
+    invoiceNumber: '',
+    companyName: '',
+    clientName: '',
+    clientEmail: '',
+    clientLocation: '',
+    taxed: false,
+    amountPaid: '',
+    date: '',
+    items: [],
+    newItemDesc: '',
+    newItemQty: '',
+    newItemRate: '',
+
+    get today() {
+        const d = new Date();
+        return d.getFullYear() + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2);
+    },
+
+    addItem() {
+        if (!this.newItemDesc || !this.newItemQty || !this.newItemRate) return;
+        this.items.push({
+            desc: this.newItemDesc,
+            qty: this.newItemQty,
+            rate: this.newItemRate
+        });
+        console.log(this.items)
+        this.saveItems();
+        this.newItemDesc = '';
+        this.newItemQty = '';
+        this.newItemRate = '';
+    },
+
+    loadDetails() {
+        const stored = sessionStorage.getItem('invoiceDetails');
+        if (!stored) return;
+        const details = JSON.parse(stored);
+        Object.assign(this, details);
+    },
+
+    saveDetails() {
+        const details = {
+            name: this.name,
+            email: this.email,
+            phone: this.phone,
+            invoiceNumber: this.invoiceNumber,
+            companyName: this.companyName,
+            clientName: this.clientName,
+            clientEmail: this.clientEmail,
+            clientLocation: this.clientLocation,
+            taxed: this.taxed,
+            amountPaid: this.amountPaid
+        };
+        sessionStorage.setItem('invoiceDetails', JSON.stringify(details));
+    },
+
+    saveItems() {
+        sessionStorage.setItem('invoiceItems', JSON.stringify(this.items));
+    },
+
+
+    sidebarOpen: false,
+    activeTab: 'info',
+    get itemsCost() {
+        return this.items.reduce((sum, item) => {
+            return sum + ((parseFloat(item.qty) * parseFloat(item.rate)) || 0);
+        }, 0);
+    },
+
+    get taxAmount() {
+        return this.taxed ? this.itemsCost * 0.13 : 0;
+    },
+
+    get totalDue() {
+        const paid = parseFloat(this.amountPaid) || 0;
+        return this.itemsCost + this.taxAmount - paid;
+    },
+    savePDF() {
+        window.print();
+    },
+
+    wipeFormDetails() {
+        this.name = '';
+        this.email = '';
+        this.phone = '';
+        this.invoiceNumber = '';
+        this.companyName = '';
+        this.clientName = '';
+        this.clientEmail = '';
+        this.clientLocation = '';
+        this.taxed = false;
+        this.amountPaid = '';
+        this.items = [];
+
+        sessionStorage.removeItem('invoiceDetails');
+        sessionStorage.removeItem('invoiceItems');
+    }
+}">
+
 <!-- 850px is portrait letter print width -->
 <!-- and 1090px for landscape letter -->
 <div id="invoice">
     <div class="heading grid">
-        <h1 id="name-value">
-            Nikolai Suvanto
-        </h1>
+        <h1 x-text="name || 'first last'"></h1>
+
+
             <div class="contact">
-                <p id="email-value">email(at)email.com</p>
-                <p id="phone-value">(xxx) xxx xxxx</p>
+                <p id="email-value" x-text="email || 'name@email.com'"></p>
+                <p id="phone-value" x-text="phone || '(xxx) xxx xxxx'"></p>
             </div>
         <div class="invoice-text">
             <h4 class="label">Invoice #</h4>
-            <p class="fs-2 fw-bop class="fs-1 fw-bold" id="invoice-number">00000</p>
+            <p class="fs-2 fw-bop class="fs-1 fw-bold" id="invoice-number" x-text="invoiceNumber ? ('00000' + invoiceNumber).slice(-5) : '00000'"></p>
         </div>
     </div>
     <div class="subheading grid">
         <div class="client-details">
             <p>Client</p>
-            <p class="fs-2 fw-bold" id="company-name">COMPANY NAME</p>
-            <p class="fs-1 fw-bold" id="client-name">CLIENT NAME</p>
-            <p class="fs-1 fw-bold" id="client-email">CLIENT@EMAIL</p>
-            <p id="client-location">LOCATION</p>
+            <p class="fs-2 fw-bold" id="company-name" x-text="companyName || 'COMPANY NAME'"></p>
+            <p class="fs-1 fw-bold" id="client-name" x-text="clientName || 'Client Name'"></p>
+            <p class="fs-1 fw-bold" id="client-email" x-text="clientEmail || 'CLIENT@EMAIL.COM'"></p>
+            <p id="client-location" x-text="clientLocation || 'Client Address'"></p>
         </div>
         <div class="date">
             <p>Date</p>
-            <p class="fs-2 fw-bold" id="date"></p>
+            <p class="fs-2 fw-bold" id="date" x-text="today"></p>
         </div>
     </div>
     <div id="item-list">
@@ -45,28 +161,36 @@ title: "Invoice Generator"
             <p class="item-amount-label">rate</p>
             <p class="item-total-label">total</p>
         </div>
+        <template x-for="(item, index) in items" :key="index">
+                <div class="item grid">
+                    <p class="item-desc" x-text="item.desc"></p>
+                    <p class="item-qty" x-text="item.qty"></p>
+                    <p class="item-cost" x-text="item.rate"></p>
+                    <p class="item-total fs-1" x-text="((parseFloat(item.qty) * parseFloat(item.rate)) || 0).toFixed(2)"></p>
+                </div>
+            </template>
     </div>
     <div class="total-row grid">
         <div class="payment-details">
             <p>Invoice payable through E-Transfer to</p>
-            <p id="payment-details"></p>
+            <p id="payment-details" x-text="email|| 'name@email.com'"></p>
         </div>
         <div class="total-list">
             <div class="cost">
                 <p>price</p>
-                <p class="fs-1" id="cost-value">0</p>
+                <p class="fs-1" id="cost-value" x-text="itemsCost.toFixed(2)"></p>
             </div>
             <div class="tax">
                 <p>tax</p>
-                <p class="fs-1" id="tax-value">0</p>
+                <p class="fs-1" id="tax-value" x-text="taxAmount.toFixed(2)"></p>
             </div>
             <div class="paid">
                 <p>paid</p>
-                <p class="fs-1" id="paid-value">0</p>
+                <p class="fs-1" id="paid-value" x-text="parseFloat(amountPaid || 0).toFixed(2)"></p>
             </div>
             <div class="total">
                 <p>amount due</p>
-                <p class="fs-4 fw-bold" id="total-value">0</p>
+                <p class="fs-4 fw-bold" id="total-value" x-text="'$' + totalDue.toFixed(2)"></p>
             </div>
         </div>
     </div>
@@ -75,4 +199,5 @@ title: "Invoice Generator"
 <script src="main.js"></script>
 <script src="sidebar.js"> </script>
 
+</div>
 {% endblock %}

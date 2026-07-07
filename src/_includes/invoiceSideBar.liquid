@@ -35,10 +35,14 @@
     <!-- Add Item panel -->
     <div class="sidebar-panel active" id="panel-item">
         <span class="panel-title">Add line item</span>
-        <form id="item-form">
-            <input id="item-desc" type="text" placeholder="Description">
-            <input id="item-qty" type="text" placeholder="Quantity / Hours">
-            <input id="item-rate" type="text" placeholder="Rate">
+        <form @submit.prevent="addItem()">
+            <input x-model="newItemDesc" type="text" placeholder="Description">
+            <input
+                x-model="newItemQty"
+                type="text"
+                placeholder="Quantity / Hours"
+            >
+            <input x-model="newItemRate" type="text" placeholder="Rate">
             <button type="submit">Add item</button>
         </form>
     </div>
@@ -46,44 +50,107 @@
     <!-- Info panel -->
     <div class="sidebar-panel" id="panel-info">
         <span class="panel-title">Your details</span>
-        <div class="contact-info">
+        <div
+            class="contact-info"
+        >
             <label for="name">Your Name</label>
-            <input id="name" type="text" name="name">
+            <input
+                id="name"
+                type="text"
+                name="name"
+                x-model="name"
+                @change="saveDetails()"
+            >
             <label for="email">Email</label>
-            <input id="email" type="text" name="email">
+            <input
+                id="email"
+                type="text"
+                name="email"
+                x-model="email"
+                @change="saveDetails()"
+            >
             <label for="phone">Phone</label>
-            <input id="phone" type="text" name="phoneNumber">
+            <input
+                id="phone"
+                type="text"
+                name="phoneNumber"
+                x-model="phone"
+                @change="saveDetails()"
+            >
         </div>
         <div class="invoice-number">
             <label for="invoiceNumber">Invoice number</label>
-            <input id="invoiceNumber" type="text" name="invoiceNumber">
+            <input
+                id="invoiceNumber"
+                type="text"
+                name="invoiceNumber"
+                x-model="invoiceNumber"
+                @change="saveDetails()"
+            >
         </div>
 
         <span class="panel-title">Client</span>
-        <form id="client-form">
-            <label for="companyName">Company name</label>
-            <input id="companyName" type="text" name="companyName">
-            <label for="clientName">Client name</label>
-            <input id="clientName" type="text" name="clientName">
-            <label for="clientEmail">Client email</label>
-            <input id="clientEmail" type="text" name="clientEmail">
-            <label for="clientLocation">Client location</label>
-            <input id="clientLocation" type="text" name="clientLocation">
-        </form>
+        <div
+            id="client-form"
+        >
+            <label for="companyNameVal">Company name</label>
+            <input
+                id="companyNameVal"
+                type="text"
+                name="companyName"
+                x-model="companyName"
+                @change="saveDetails()"
+            >
+            <label for="clientNameVal">Client Name</label>
+            <input
+                id="clientNameVal"
+                type="text"
+                x-model="clientName"
+                @change="saveDetails()"
+            >
+            <label for="clientEmailVal">Client email</label>
+            <input
+                id="clientEmailVal"
+                type="text"
+                name="clientEmail"
+                x-model="clientEmail"
+                @change="saveDetails()"
+            >
+            <label for="clientLocationVal">Client location</label>
+            <input
+                id="clientLocationVal"
+                type="text"
+                name="clientLocation"
+                x-model="clientLocation"
+                @change="saveDetails()"
+            >
+        </div>
 
         <span class="panel-title">Totals</span>
         <div class="total-settings">
             <div class="tax-rate">
                 <label for="taxed">Tax?</label>
-                <input id="taxed" type="checkbox" name="taxed">
+                <input
+                    id="taxed"
+                    type="checkbox"
+                    name="taxed"
+                    x-model="taxed"
+                    @change="saveDetails()"
+                >
             </div>
             <div class="amount-paid">
                 <label for="amountPaid">Amount already paid</label>
-                <input id="amountPaid" type="text" name="paidAmount">
+                <input
+                    id="amountPaid"
+                    type="text"
+                    name="amountPaid"
+                    x-model="amountPaid"
+                    @change="saveDetails()"
+                >
             </div>
         </div>
 
-        <button type="button" onclick="savePDF();">Download as PDF</button>
-        <button type="button" onclick="wipeFormDetails();">Reset Values</button>
+        <button type="button" @click="savePDF();">Download as PDF</button>
+        <button type="button" @click="wipeFormDetails();">Reset Values</button>
     </div>
 </aside>
