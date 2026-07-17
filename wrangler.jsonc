@@ -9,7 +9,7 @@
   //   },
   // ],
   "build": {
-    "command": "npx @11ty/eleventy",
+    "command": "npx @11ty/eleventy --pathprefix=/tools/",
   },
   "assets": {
     "directory": "./dist",

@@ -20,21 +20,21 @@
 
 @font-face {
     font-family: "Alte Haas Grotesk";
-    src: url("/fonts/AlteHaasGroteskRegular.ttf") format("truetype");
+    src: url("fonts/AlteHaasGroteskRegular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Alte Haas Grotesk";
-    src: url("/fonts/AlteHaasGroteskBold.ttf") format("truetype");
+    src: url("fonts/AlteHaasGroteskBold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Junicode";
-    src: url("/fonts/JunicodeVF-Italic.woff2") format("woff2");
+    src: url("fonts/JunicodeVF-Italic.woff2") format("woff2");
     font-stretch: 87.5%;
     font-weight: 800;
     font-style: normal;
@@ -42,7 +42,7 @@
 
 @font-face {
     font-family: "FiraCodeNFM";
-    src: url("/fonts/FiraCodeNerdFontMono-Retina.ttf") format("truetype");
+    src: url("fonts/FiraCodeNerdFontMono-Retina.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
 }

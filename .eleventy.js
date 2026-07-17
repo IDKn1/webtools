@@ -1,5 +1,5 @@
-module.exports = function (eleventyConfig) {
-  eleventyConfig.addPassthroughCopy({ "src/static/": "/" });
+module.exports = async function (eleventyConfig) {
+  eleventyConfig.addPassthroughCopy({ "src/static/": "/tools/" });
 
   eleventyConfig.addFilter("brightness", (code) => {
     const red = parseInt(code.slice(0, 2), 16);
@@ -9,7 +9,12 @@ module.exports = function (eleventyConfig) {
     return avg > 186 ? "black" : "white";
   });
 
+  const { HtmlBasePlugin } = await import("@11ty/eleventy");
+
+	eleventyConfig.addPlugin(HtmlBasePlugin);
+
   return {
+    pathPrefix: "/tools/",
     dir: {
       input: "src",
       output: "dist",
