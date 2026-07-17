@@ -58,7 +58,7 @@
         const data = JSON.stringify(
             Object.fromEntries(new FormData(postFormEl)),
         );
-        sendRequest('https://tools.n-s.work/api/colors', 'POST', data);
+        sendRequest('https://n-s.work/api/colors', 'POST', data);
     });
 
     delFormEl.addEventListener('submit', (e) => {
@@ -66,7 +66,7 @@
         const data = JSON.stringify(
             Object.fromEntries(new FormData(delFormEl)),
         );
-        sendRequest('https://tools.n-s.work/api/colors', 'DELETE', data);
+        sendRequest('https://n-s.work/api/colors', 'DELETE', data);
     });
 </script>
 {% endblock %}
