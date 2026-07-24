@@ -195,6 +195,12 @@ a:focus {
     letter-spacing: var(--letter-space-2);
 }
 
+.fs-2b {
+    font-size: var(--font-size-2b);
+    line-height: var(--line-height-2);
+    /*letter-spacing: var(--letter-space-2b);*/
+}
+
 .fs-3 {
     font-size: var(--font-size-3);
     line-height: var(--line-height-3);

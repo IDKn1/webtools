@@ -2,10 +2,10 @@
 <script type="module">
     lucide.createIcons();
 </script>
-<button class="sidebar-open-btn" id="sidebar-open-btn" type="button">
+<button class="sidebar-open-btn no-print" id="sidebar-open-btn" type="button">
     <i data-lucide="panel-right-open"></i>
 </button>
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar no-print" id="sidebar">
     <div class="sidebar-tabs">
         <button
             class="tab-btn active"
@@ -25,6 +25,14 @@
         </button>
         <button
             class="tab-btn"
+            id="tab-settings"
+            title="Settings"
+            onclick="switchTab('settings')"
+        >
+            <i data-lucide="settings"></i>
+        </button>
+        <button
+            class="tab-btn"
             id="sidebar-close-btn"
             type="button"
         >
@@ -34,17 +42,65 @@
 
     <!-- Add Item panel -->
     <div class="sidebar-panel active" id="panel-item">
-        <span class="panel-title">Add line item</span>
-        <form @submit.prevent="addItem()">
-            <input x-model="newItemDesc" type="text" placeholder="Description">
-            <input
-                x-model="newItemQty"
-                type="text"
-                placeholder="Quantity / Hours"
-            >
-            <input x-model="newItemRate" type="text" placeholder="Rate">
-            <button type="submit">Add item</button>
-        </form>
+            <span class="panel-title">Add line item</span>
+            <form @submit.prevent="addItem()">
+                <input x-model="newItemDesc" type="text" placeholder="Description">
+                <input
+                    x-model="newItemQty"
+                    type="text"
+                    placeholder="Quantity / Hours"
+                >
+                <input x-model="newItemRate" type="text" placeholder="Rate">
+                <button type="submit">Add item</button>
+            </form>
+
+            <div class="item-list-editor">
+                <template x-for="(item, index) in items" :key="index">
+                    <div class="item-row">
+                        <span x-text="item.desc"></span>
+                        <button type="button" @click="removeItem(index)">Remove</button>
+                    </div>
+                </template>
+            </div>
+
+            <span class="panel-title">Contract Related Fields</span>
+            <input type="text" x-model="newElementText" placeholder="e.g. Website, Logo e.t.c.">
+            <button @click="addElement()">Add</button>
+            <div class="element-list-editor">
+                <template x-for="(element, index) in elementsCovered" :key="index">
+                    <div class="element-row">
+                        <span x-text="element"></span>
+                        <button type="button" @click="removeElement(index)">Remove</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+    <!-- Settings panel -->
+    <div class="sidebar-panel" id="panel-settings">
+        <span class="panel-title">Print visibility</span>
+        <div class="print-settings">
+            <div class="print-invoice">
+                <label for="printInvoice">Include Invoice</label>
+                <input
+                    id="printInvoice"
+                    type="checkbox"
+                    name="printInvoice"
+                    x-model="printInvoice"
+                    @change="saveDetails()"
+                >
+            </div>
+            <div class="print-contract">
+                <label for="printContract">Include Contract</label>
+                <input
+                    id="printContract"
+                    type="checkbox"
+                    name="printContract"
+                    x-model="printContract"
+                    @change="saveDetails()"
+                >
+            </div>
+        </div>
     </div>
 
     <!-- Info panel -->

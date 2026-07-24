@@ -1,0 +1,74 @@
+
+<div id="contract" class="document" :class="{ 'print-hide': !printContract }">
+    <div class="heading grid">
+        <h1 x-text="name || 'first last'"></h1>
+
+        <div class="contact">
+            <p id="contract-email-value" x-text="email || 'name@email.com'"></p>
+            <p id="contract-phone-value" x-text="phone || '(xxx) xxx xxxx'"></p>
+        </div>
+    <h4 class="contract-title">Transfer of Copyright</h4>
+    </div>
+    <div class="subheading grid">
+        <div class="elements-details">
+            <p class="">Elements Covered Under Transfer</p>
+            <template x-for="(element, index) in elementsCovered" :key="index">
+                <p class="fs-2 fw-bold element-item" x-text="element"></p>
+            </template>
+        </div>
+    </div>
+    <div class="signee-row grid">
+        <div class="signee designer-details">
+            <h4 class="label">The Designer</h4>
+            <div class="signee-field">
+                <p>Full Name:</p>
+                <p class="fw-bold" id="designer-full-name" x-text="name || 'Designer Name'"></p>
+            </div>
+            <div class="signature-line">
+                <p>Signature:</p>
+            </div>
+            <div class="signee-field">
+                <p>Date (YYYY-MM-DD):</p>
+                <p class="fw-bold" id="designer-sign-date" x-text="today"></p>
+            </div>
+        </div>
+        <div class="signee client-details">
+            <h4 class="label">The Client</h4>
+            <div class="signee-field">
+                <p>Full Name:</p>
+                <p class="fw-bold" id="client-full-name" x-text="clientName || 'Client Name'"></p>
+            </div>
+            <div class="signature-line">
+                <p>Signature:</p>
+            </div>
+            <div class="signee-field">
+                <p>Date (YYYY-MM-DD):</p>
+                <p class="fw-bold" id="client-sign-date" x-text="clientSignDate"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="legal-section grid">
+        <div class="legal-block scope-of-transfer">
+            <p class="legal-section-subheading fs-2 fw-bold">Scope of Copyright Transfer</p>
+            <p class="fs-2b">By signing this Copyright Transfer Form, I will be relinquishing all personal, professional, and ownership rights, to all designs detailed above.</p>
+            <p class="fs-2b">This signed agreement also includes the Transfer of Ownership to any variations of the logo previously agreed, and supplied as part of the initial contract. Example of these included variations could include: multiple colour versions; size and dimensional variations: landscape and portrait; inversed versions; social media profile images; favicon; etc.</p>
+            <p class="fw-bold fs-2b">Unless otherwise agreed and arranged, I reserve the right to showcase the finished designs in my portfolio, and in any number of online galleries &amp; portfolios, as well as in printed literature including, but not limited to: books, catalogues, brochures and magazines.</p>
+        </div>
+        <div class="legal-block restrictions-caveats">
+            <p class="legal-section-subheading fs-2 fw-bold">Restrictions &amp; Caveats</p>
+            <p class="fw-bold fs-2b">The Copyright Transfer Form does not give you permission, to: use, modify, alter, replicate or borrow, any of the previous and unused: logo ideas, concepts, sketches previously shown and presented during the course of the project.</p>
+            <p class="fs-2b">All original preparation materials, sketches, visuals and unused ideas previously shown, and considered, will remain the property of <span x-text="name || 'the designer'"></span>. I am free to use these unused ideas for future conceptual, and client work. Where a previously unused idea/design retains a similar look and style to the finished designs, I shall repurpose and style as to be sufficiently different so as not to cause conflict.</p>
+            <p class="fs-2b">You are free to change, modify and adapt the finished designs as you see fit, but you do so at your own risk, and at the risk of diluting, or causing confusion, over your existing Brand Identity.</p>
+        </div>
+    </div>
+    <div class="trademark">
+        <p class="legal-section-subheading fs-2 fw-bold">Trademark &#8482; &amp; Registered Trademark &#174;</p>
+                <p class="fs-2b">It is important to note that Copyright is not the same as a Trademark, or Registered Trademark. <span class="fw-bold">This form does not provide any Trademark ownership, or protection.</span>
+
+                If you are seeking brand protection, then applying for a Trademark is the way to go. Unfortunately, I am unable to help with this process due to complex nature of hiring a lawyer, and correctly applying &amp; registering for a Trademark.</p>
+    </div>
+
+
+</div>
